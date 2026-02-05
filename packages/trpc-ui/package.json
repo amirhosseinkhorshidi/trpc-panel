@@ -1,14 +1,14 @@
 {
   "name": "@ajayche/trpc-panel",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "UI for testing tRPC backends",
   "main": "lib/index.js",
   "module": "lib/index.mjs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iway1/trpc-panel"
+    "url": "https://github.com/amirhosseinkhorshidi/trpc-panel"
   },
-  "homepage": "https://github.com/iway1/trpc-panel#readme",
+  "homepage": "https://github.com/amirhosseinkhorshidi/trpc-panel#readme",
   "typings": "lib/src/index.d.ts",
   "scripts": {
     "test": "jest",
