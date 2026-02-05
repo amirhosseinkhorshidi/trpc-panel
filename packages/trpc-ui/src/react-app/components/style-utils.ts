@@ -77,6 +77,21 @@ export function textColor(type: ColorSchemeType) {
   }
 }
 
+export function gradientBackground(type: ColorSchemeType) {
+  switch (type) {
+    case "mutation":
+      return "bg-gradient-mutation";
+    case "query":
+      return "bg-gradient-query";
+    case "router":
+      return "bg-gradient-router";
+    case "neutral":
+      return "bg-gradient-neutral";
+    case "subscription":
+      return "bg-gradient-subscription";
+  }
+}
+
 export function colorSchemeForNode(
   node: ParsedRouter | ParsedProcedure,
 ): ColorSchemeType {

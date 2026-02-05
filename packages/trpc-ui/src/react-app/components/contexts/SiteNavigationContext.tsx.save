@@ -1,5 +1,4 @@
-import { useAllPaths } from "@src/react-app/components/contexts/AllPathsContext";
-import React, {
+import { useAllPaths } from "@src/react-app/components/contexts/eact, {
   createContext,
   type ReactNode,
   useContext,

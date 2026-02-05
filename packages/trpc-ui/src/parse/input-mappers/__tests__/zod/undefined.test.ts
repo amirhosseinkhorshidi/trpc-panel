@@ -12,7 +12,7 @@ describe("Parse ZodUndefined", () => {
     };
     const schema = z.undefined();
     expect(
-      parseZodUndefinedDef(schema._def, defaultReferences()),
+      parseZodUndefinedDef(schema._zod.def, defaultReferences()),
     ).toStrictEqual(unexpected);
   });
 });

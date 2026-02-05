@@ -3,12 +3,14 @@ import type {
   ParseReferences,
   ParsedInputNode,
 } from "@src/parse/parseNodeTypes";
-import type { ZodEffectsDef } from "zod";
 
 export function parseZodEffectsDef(
-  def: ZodEffectsDef,
+  def: any,
   refs: ParseReferences,
 ): ParsedInputNode {
   refs.addDataFunctions.addDescriptionIfExists(def, refs);
-  return zodSelectorFunction(def.schema._def, refs);
+  // In Zod 4, pipe/transform uses def.in for input schema
+  // If it's a transform type, it might still use def.schema
+  const schema = def.in || def.schema;
+  return zodSelectorFunction(schema._zod.def, refs);
 }

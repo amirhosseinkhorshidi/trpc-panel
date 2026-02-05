@@ -10,8 +10,8 @@ describe("Parse ZodString", () => {
       path: [],
     };
     const schema = z.string();
-    expect(parseZodStringDef(schema._def, defaultReferences())).toStrictEqual(
-      expected,
-    );
+    expect(
+      parseZodStringDef(schema._zod.def, defaultReferences()),
+    ).toStrictEqual(expected);
   });
 });

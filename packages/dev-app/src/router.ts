@@ -168,7 +168,9 @@ export const appRouter = createTRPCRouter({
     emailTextInput: procedure
       .input(
         z.object({
-          email: z.string().email("That's an invalid email (custom message)"),
+          email: z.email({
+            message: "That's an invalid email (custom message)",
+          }),
         }),
       )
       .query(() => {

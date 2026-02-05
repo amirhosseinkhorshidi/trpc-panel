@@ -40,6 +40,8 @@ export default [
     plugins: [
       postcss({
         extract: path.resolve("lib/react-app/index.css"),
+        minimize: true,
+        inject: false,
       }),
       nodeResolve({
         extensions: [".js", ".ts", ".tsx", "ts"],

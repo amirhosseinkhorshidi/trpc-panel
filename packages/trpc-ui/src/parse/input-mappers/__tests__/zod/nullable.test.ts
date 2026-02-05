@@ -10,8 +10,8 @@ describe("Parse ZodNullable", () => {
       path: [],
     };
     const schema = z.number().nullable();
-    expect(parseZodNullableDef(schema._def, defaultReferences())).toStrictEqual(
-      expected,
-    );
+    expect(
+      parseZodNullableDef(schema._zod.def, defaultReferences()),
+    ).toStrictEqual(expected);
   });
 });

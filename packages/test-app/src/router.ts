@@ -30,7 +30,7 @@ async function createContext(opts: trpcExpress.CreateExpressContextOptions) {
 type ContextType = Awaited<ReturnType<typeof createContext>>;
 
 const PostSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   text: z.string().min(1),
 });
 
@@ -212,7 +212,9 @@ export const testRouter = t.router({
     emailTextInput: t.procedure
       .input(
         z.object({
-          email: z.string().email("That's an invalid email (custom message)"),
+          email: z.email({
+            message: "That's an invalid email (custom message)",
+          }),
         }),
       )
       .query(({ input }) => {

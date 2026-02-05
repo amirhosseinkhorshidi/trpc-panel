@@ -58,7 +58,7 @@ describe("Parse Zod Discriminated Union", () => {
       }),
     ]);
     const parsedZod = parseZodDiscriminatedUnionDef(
-      zodSchema._def as unknown as ZodDiscriminatedUnionDefUnversioned,
+      zodSchema._zod.def as unknown as ZodDiscriminatedUnionDefUnversioned,
       defaultReferences(),
     );
     expect(parsedZod).toStrictEqual(expected);

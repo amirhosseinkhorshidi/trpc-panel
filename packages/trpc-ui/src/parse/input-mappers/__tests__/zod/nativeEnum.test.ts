@@ -18,7 +18,7 @@ describe("Parse ZodNativeEnum", () => {
     }
 
     const parsed = parseZodNativeEnumDef(
-      z.nativeEnum(ExampleEnum)._def,
+      z.nativeEnum(ExampleEnum)._zod.def,
       defaultReferences(),
     );
     expect(expected).toStrictEqual(parsed);

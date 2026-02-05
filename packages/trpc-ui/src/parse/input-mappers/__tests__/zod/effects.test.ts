@@ -10,8 +10,8 @@ describe("Parse ZodEffects", () => {
       path: [],
     };
     const schema = z.preprocess((val) => String(val), z.string());
-    expect(parseZodEffectsDef(schema._def, defaultReferences())).toStrictEqual(
-      expected,
-    );
+    expect(
+      parseZodEffectsDef(schema._zod.def, defaultReferences()),
+    ).toStrictEqual(expected);
   });
 });

@@ -1,5 +1,4 @@
 import { HeadersPopup } from "@src/react-app/components/HeadersPopup";
-import { SearchOverlay } from "@src/react-app/components/SearchInputOverlay";
 import { AllPathsContextProvider } from "@src/react-app/components/contexts/AllPathsContext";
 import {
   HeadersContextProvider,
@@ -8,7 +7,6 @@ import {
 import { HotKeysContextProvider } from "@src/react-app/components/contexts/HotKeysContext";
 import { SiteNavigationContextProvider } from "@src/react-app/components/contexts/SiteNavigationContext";
 import { useSiteNavigationContext } from "@src/react-app/components/contexts/SiteNavigationContext";
-import { useLocalStorage } from "@src/react-app/components/hooks/useLocalStorage";
 import type { RenderOptions } from "@src/render";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -22,7 +20,6 @@ import superjson from "superjson";
 import type { ParsedRouter } from "../parse/parseRouter";
 import { MetaHeader } from "./components/MetaHeader";
 import { RouterContainer } from "./components/RouterContainer";
-import { SideNav } from "./components/SideNav";
 import { TopBar } from "./components/TopBar";
 import { RenderOptionsProvider } from "./components/contexts/OptionsContext";
 
@@ -43,11 +40,9 @@ export function RootComponent({
             <ClientProviders trpc={trpc} options={options}>
               <HotKeysContextProvider>
                 <RenderOptionsProvider options={options}>
-                  <SearchOverlay>
-                    <div className="relative flex h-full w-full flex-1 flex-col">
-                      <AppInnards rootRouter={rootRouter} options={options} />
-                    </div>
-                  </SearchOverlay>
+                  <div className="relative flex h-full w-full flex-1 flex-col">
+                    <AppInnards rootRouter={rootRouter} options={options} />
+                  </div>
                 </RenderOptionsProvider>
               </HotKeysContextProvider>
             </ClientProviders>
@@ -101,10 +96,6 @@ function AppInnards({
   rootRouter: ParsedRouter;
   options: RenderOptions;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useLocalStorage(
-    "trpc-panel.show-minimap",
-    true,
-  );
   const { openAndNavigateTo } = useSiteNavigationContext();
 
   const [path] = useQueryState("path", parseAsArrayOf(parseAsString, "."));
@@ -114,14 +105,9 @@ function AppInnards({
   }, []);
 
   return (
-    <div className="relative flex flex-1 flex-col">
-      <TopBar open={sidebarOpen} setOpen={setSidebarOpen} />
-      <div className="flex flex-1 flex-row bg-mainBackground">
-        <SideNav
-          rootRouter={rootRouter}
-          open={sidebarOpen}
-          setOpen={setSidebarOpen}
-        />
+    <div className="relative flex flex-1 flex-col bg-mainBackground">
+      <TopBar rootRouter={rootRouter} />
+      <div className="flex flex-1 flex-col">
         <div
           className="flex flex-1 flex-col items-center overflow-scroll"
           style={{
@@ -134,7 +120,6 @@ function AppInnards({
           </div>
         </div>
       </div>
-      <HeadersPopup />
       <Toaster />
     </div>
   );

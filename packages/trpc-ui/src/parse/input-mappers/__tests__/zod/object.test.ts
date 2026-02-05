@@ -11,9 +11,9 @@ describe("Parse ZodObject", () => {
       path: [],
     };
     const schema = z.object({});
-    expect(parseZodObjectDef(schema._def, defaultReferences())).toStrictEqual(
-      expected,
-    );
+    expect(
+      parseZodObjectDef(schema._zod.def, defaultReferences()),
+    ).toStrictEqual(expected);
   });
   it("should parse an object with different property types", () => {
     const expected: ObjectNode = {
@@ -34,9 +34,9 @@ describe("Parse ZodObject", () => {
       number: z.number(),
       string: z.string(),
     });
-    expect(parseZodObjectDef(schema._def, defaultReferences())).toStrictEqual(
-      expected,
-    );
+    expect(
+      parseZodObjectDef(schema._zod.def, defaultReferences()),
+    ).toStrictEqual(expected);
   });
   it("should correctly create nested object paths", () => {
     const expected: ObjectNode = {
@@ -68,8 +68,8 @@ describe("Parse ZodObject", () => {
         }),
       }),
     });
-    expect(parseZodObjectDef(schema._def, defaultReferences())).toStrictEqual(
-      expected,
-    );
+    expect(
+      parseZodObjectDef(schema._zod.def, defaultReferences()),
+    ).toStrictEqual(expected);
   });
 });

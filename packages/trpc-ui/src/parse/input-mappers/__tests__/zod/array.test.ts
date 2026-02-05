@@ -15,7 +15,7 @@ describe("Parse Zod Array", () => {
       path: [],
     };
     const schema = z.string().array();
-    const parsed = parseZodArrayDef(schema._def, defaultReferences());
+    const parsed = parseZodArrayDef(schema._zod.def, defaultReferences());
     expect(parsed).toStrictEqual(expected);
   });
 
@@ -37,7 +37,7 @@ describe("Parse Zod Array", () => {
     const schema = z.object({
       childArray: z.string().array(),
     });
-    const parsed = parseZodObjectDef(schema._def, defaultReferences());
+    const parsed = parseZodObjectDef(schema._zod.def, defaultReferences());
     expect(parsed).toStrictEqual(expected);
   });
 });

@@ -1,14 +1,13 @@
 import { nodePropertiesFromRef } from "@src/parse/utils";
-import type { ZodArrayDef } from "zod";
 import type { ArrayNode, ParseFunction } from "../../../parseNodeTypes";
 import { zodSelectorFunction } from "../selector";
 
-export const parseZodArrayDef: ParseFunction<ZodArrayDef, ArrayNode> = (
-  def,
-  refs,
-) => {
-  const { type } = def;
-  const childType = zodSelectorFunction(type._def, { ...refs, path: [] });
+export const parseZodArrayDef: ParseFunction<any, ArrayNode> = (def, refs) => {
+  // In Zod 4, array element is in def.element instead of def.type
+  const childType = zodSelectorFunction(def.element._zod.def, {
+    ...refs,
+    path: [],
+  });
   refs.addDataFunctions.addDescriptionIfExists(def, refs);
   return {
     type: "array",

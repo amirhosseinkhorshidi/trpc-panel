@@ -1,11 +1,11 @@
 {
   "name": "trpc-ui-monorepo",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "packageManager": "pnpm@9.15.1",
   "scripts": {
-    "test:panel": "pnpm -F trpc-ui test",
-    "build:panel": "pnpm -F trpc-ui build",
+    "test:panel": "pnpm -F @ajayche/trpc-panel test",
+    "build:panel": "pnpm -F @ajayche/trpc-panel build",
     "build:test-app": "pnpm -F test-app build",
     "dev:dev-app": "pnpm -F dev-app dev",
     "dev:test-app": "pnpm -F test-trpc-panel dev",

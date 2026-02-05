@@ -1,74 +1,50 @@
 import MailLockIcon from "@mui/icons-material/MailLockOutlined";
-import Search from "@mui/icons-material/Search";
-import { Chevron } from "@src/react-app/components/Chevron";
-import { LogoSvg } from "@src/react-app/components/LogoSvg";
+import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
+import type { ParsedRouter } from "@src/parse/parseRouter";
+import { HeadersPopup } from "@src/react-app/components/HeadersPopup";
 import { useHeadersContext } from "@src/react-app/components/contexts/HeadersContext";
-import { useSearch } from "@src/react-app/components/contexts/SearchStore";
-import { useIsMac } from "@src/react-app/components/hooks/useIsMac";
+import { collapsables } from "@src/react-app/components/contexts/SiteNavigationContext";
 import React from "react";
 
-export function TopBar({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
-  const { setHeadersPopupShown } = useHeadersContext();
+export function TopBar({ rootRouter }: { rootRouter: ParsedRouter }) {
+  const { setHeadersPopupShown, headersPopupShown } = useHeadersContext();
+
   return (
-    <div className="position-fixed top-0 right-0 left-0 flex h-16 w-full flex-row items-center justify-between border-b border-b-panelBorder bg-actuallyWhite bg-gray-50 px-4 pr-8 drop-shadow-sm">
-      <div className="flex flex-row items-center gap-4">
-        <button
-          type="button"
-          onClick={() => setOpen((prev) => !prev)}
-          aria-label="Toggle sidebar"
-          aria-pressed={open}
-        >
-          {open ? (
-            <Chevron className="h-4 w-4" direction="left" />
-          ) : (
-            <Chevron className="h-4 w-4" direction="right" />
-          )}
-        </button>
-        <a
-          href="https://github.com/aidansunbury/trpc-ui"
-          target="_blank"
-          className="flex flex-row items-center font-bold font-mono text-lg"
-          rel="noreferrer"
-        >
-          <LogoSvg className="mr-2 h-10 w-10 rounded-lg" />
-          tRPC.ui()
-        </a>
+    <div className="sticky top-0 z-50 flex w-full items-center justify-center py-3">
+      <div className="flex h-16 w-full max-w-6xl items-center justify-between rounded-2xl border border-gray-200/50 bg-white/50 px-6 shadow-sm backdrop-blur-lg transition-all">
+        {/* Left: Logo/Brand */}
+        <div className="flex items-center gap-3">
+          <span className="font-bold text-gray-900 text-xl tracking-tight">
+            tRPC UI
+          </span>
+        </div>
+
+        {/* Right: Action Buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => collapsables.hideAll()}
+            className="flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-3 py-1.5 font-medium text-gray-700 text-xs transition-all hover:border-gray-400 hover:bg-gray-50"
+            type="button"
+            title="Collapse All"
+          >
+            <UnfoldLessIcon className="h-3.5 w-3.5" />
+            <span>Collapse All</span>
+          </button>
+          <div className="relative">
+            <button
+              onClick={() => setHeadersPopupShown(!headersPopupShown)}
+              className={`flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-3 py-1.5 font-medium text-gray-700 text-xs transition-all hover:border-gray-400 hover:bg-gray-50 ${
+                headersPopupShown ? "border-gray-400 bg-gray-50" : ""
+              }`}
+              type="button"
+            >
+              <MailLockIcon className="h-3.5 w-3.5" />
+              <span>Headers</span>
+            </button>
+            <HeadersPopup />
+          </div>
+        </div>
       </div>
-      <RouterSearchTooltip />
-      <button
-        onClick={() => setHeadersPopupShown(true)}
-        className="rounded-sm border border-neutralSolidTransparent px-4 py-2 font-bold text-neutralText shadow-sm"
-        type="button"
-      >
-        Headers
-        <MailLockIcon className="ml-1 h-6 w-6" />
-      </button>
     </div>
-  );
-}
-
-// import Search from '@mui/icons-material/Search'
-export function RouterSearchTooltip() {
-  const searchOpen = useSearch((s) => s.searchOpen);
-  const setSearchOpen = useSearch((s) => s.setSearchOpen);
-
-  const isMac = useIsMac();
-  const helperText = isMac ? "⌘ + P" : "Ctrl + P";
-  if (searchOpen) return null;
-  return (
-    <button
-      onClick={() => setSearchOpen(true)}
-      type="button"
-      className="flex flex-row items-center text-neutralSolidTransparent"
-    >
-      <Search fontSize="small" className="color-neutralSolidTransparent mr-2" />
-      {helperText}
-    </button>
   );
 }

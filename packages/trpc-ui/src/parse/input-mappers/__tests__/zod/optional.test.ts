@@ -11,9 +11,9 @@ describe("Parse ZodOptional", () => {
       path: [],
     };
     const schema = z.number().optional();
-    expect(parseZodOptionalDef(schema._def, defaultReferences())).toStrictEqual(
-      expected,
-    );
+    expect(
+      parseZodOptionalDef(schema._zod.def, defaultReferences()),
+    ).toStrictEqual(expected);
   });
   it("should not apply optional: true to nodes that are not direct children", () => {
     const expected: ObjectNode = {
@@ -32,8 +32,8 @@ describe("Parse ZodOptional", () => {
         number: z.number(),
       })
       .optional();
-    expect(parseZodOptionalDef(schema._def, defaultReferences())).toStrictEqual(
-      expected,
-    );
+    expect(
+      parseZodOptionalDef(schema._zod.def, defaultReferences()),
+    ).toStrictEqual(expected);
   });
 });

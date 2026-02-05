@@ -1,3 +1,4 @@
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { Chevron } from "@src/react-app/components/Chevron";
 import {
   collapsables,
@@ -16,6 +17,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
+import toast from "react-hot-toast";
 
 export type ColorSchemeType =
   | "query"
@@ -71,34 +73,45 @@ export function CollapsableSection({
       }${!isRoot ? " rounded-[0.25rem] border" : ""}`}
     >
       {collapsable ? (
-        <button
-          type="button"
-          onClick={() => {
-            collapsables.toggle(fullPath);
-            if (shown) {
-              setPath(null);
-            } else {
-              setPath(fullPath.join("."));
-            }
-          }}
-          className="flex flex-row items-center justify-between p-1 "
-        >
-          <span className="flex flex-row">
+        <div className="group/header flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => {
+              collapsables.toggle(fullPath);
+              if (shown) {
+                setPath(null);
+              } else {
+                setPath(fullPath.join("."));
+              }
+            }}
+            className="flex flex-1 flex-row items-center p-1 transition-all duration-150 active:scale-[0.995]"
+          >
             <SectionTypeLabel className="mr-2" sectionType={sectionType} />
             {titleElement}
-          </span>
-
-          <Chevron
-            className={"mr-2 h-4 w-4 animate-transform transition-transform"}
-            direction={shown ? "up" : "down"}
-          />
-        </button>
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              const pathString = fullPath.join(".");
+              navigator.clipboard.writeText(pathString);
+              toast.success(`Copied: ${pathString}`, {
+                duration: 2000,
+                position: "bottom-center",
+              });
+            }}
+            className="mr-2 rounded p-1 opacity-0 transition-opacity hover:bg-gray-100 group-hover/header:opacity-100"
+            title="Copy path"
+          >
+            <ContentCopyIcon className="h-3 w-3 text-gray-400" />
+          </button>
+        </div>
       ) : (
         titleElement
       )}
 
       <div
-        className={`flex-col justify-between ${collapsable ? ` border-t ${solidColorBorder(sectionType)}` : ""}${shown || !collapsable ? " flex" : " hidden"}`}
+        className={`flex-col justify-between ${collapsable ? ` border-t ${solidColorBorder(sectionType)}` : ""}${shown || !collapsable ? " slide-in flex" : " hidden"}`}
       >
         {children}
       </div>
@@ -115,9 +128,9 @@ export function SectionTypeLabel({
 }) {
   return (
     <span
-      className={`flex w-32 flex-row justify-center rounded-md p-1 font-bold text-base text-light ${solidColorBg(sectionType)}${className ? ` ${className}` : ""}`}
+      className={`flex w-28 flex-row justify-center rounded-lg px-3 py-1.5 font-bold font-sans text-sm text-white uppercase tracking-wide shadow-sm ${solidColorBg(sectionType)}${className ? ` ${className}` : ""}`}
     >
-      {sectionType.toUpperCase()}
+      {sectionType}
     </span>
   );
 }

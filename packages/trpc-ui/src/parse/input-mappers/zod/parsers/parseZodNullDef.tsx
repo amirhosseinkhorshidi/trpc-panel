@@ -3,10 +3,9 @@ import type {
   ParsedInputNode,
 } from "@src/parse/parseNodeTypes";
 import { nodePropertiesFromRef } from "@src/parse/utils";
-import type { ZodNullDef } from "zod";
 
 export function parseZodNullDef(
-  def: ZodNullDef,
+  def: any,
   refs: ParseReferences,
 ): ParsedInputNode {
   refs.addDataFunctions.addDescriptionIfExists(def, refs);

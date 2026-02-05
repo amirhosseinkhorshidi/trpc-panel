@@ -14,11 +14,9 @@ const SharedProcedureDefPropertiesSchema = z.object({
   meta: TRPCPanelMetaSchema.optional(),
 });
 
-const QueryDefSchema = SharedProcedureDefPropertiesSchema.merge(
-  z.object({
-    type: z.literal("query"),
-  }),
-);
+const QueryDefSchema = SharedProcedureDefPropertiesSchema.extend({
+  type: z.literal("query"),
+});
 
 export function isQueryDef(obj: unknown): obj is QueryDef {
   return QueryDefSchema.safeParse(obj).success;
@@ -26,11 +24,9 @@ export function isQueryDef(obj: unknown): obj is QueryDef {
 
 type QueryDef = z.infer<typeof QueryDefSchema>;
 
-const MutationDefSchema = SharedProcedureDefPropertiesSchema.merge(
-  z.object({
-    type: z.literal("mutation"),
-  }),
-);
+const MutationDefSchema = SharedProcedureDefPropertiesSchema.extend({
+  type: z.literal("mutation"),
+});
 
 export function isMutationDef(obj: unknown): obj is MutationDef {
   return MutationDefSchema.safeParse(obj).success;
@@ -38,11 +34,9 @@ export function isMutationDef(obj: unknown): obj is MutationDef {
 
 export type MutationDef = z.infer<typeof MutationDefSchema>;
 
-const SubscriptionDefSchema = SharedProcedureDefPropertiesSchema.merge(
-  z.object({
-    type: z.literal("subscription"),
-  }),
-);
+const SubscriptionDefSchema = SharedProcedureDefPropertiesSchema.extend({
+  type: z.literal("subscription"),
+});
 
 type SubscriptionDef = z.infer<typeof SubscriptionDefSchema>;
 

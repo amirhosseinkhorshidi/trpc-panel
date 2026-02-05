@@ -1,4 +1,3 @@
-import type { ZodTypeDef } from "zod";
 import type { ZodDiscriminatedUnionDefUnversioned } from "./input-mappers/zod/parsers/parseZodDiscriminatedUnionDef";
 import type { TrpcPanelExtraOptions } from "./parseRouter";
 
@@ -7,7 +6,8 @@ export type SharedInputNodeProperties = {
   optional?: true;
 };
 
-type InputNodeTypes = ZodTypeDef | ZodDiscriminatedUnionDefUnversioned;
+// In Zod 4, ZodTypeDef is no longer exported, so we use a generic type
+type InputNodeTypes = { type: string } | ZodDiscriminatedUnionDefUnversioned;
 
 export type ArrayNode = {
   type: "array";

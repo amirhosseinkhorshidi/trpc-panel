@@ -5,7 +5,7 @@ import { Button } from "@src/react-app/components/Button";
 import { useHeadersContext } from "@src/react-app/components/contexts/HeadersContext";
 import { FieldError } from "@src/react-app/components/form/fields/FieldError";
 import { BaseTextField } from "@src/react-app/components/form/fields/base/BaseTextField";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 export function HeadersPopup() {
@@ -19,6 +19,7 @@ export function HeadersPopup() {
   } = useHeadersContext();
   const [headers, setHeaders] = useState<[string, string][]>([]);
   const [errors, setErrors] = useState<boolean[]>([]);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   function addHeader() {
     setHeaders((old) => [...old, ["", ""]]);
@@ -68,7 +69,10 @@ export function HeadersPopup() {
     }
     setContextHeaders(Object.fromEntries(headers));
     setHeadersPopupShown(false);
-    toast("Headers updated.");
+    toast.success("Headers updated.", {
+      duration: 2000,
+      position: "bottom-center",
+    });
   }
 
   useEffect(() => {
@@ -76,23 +80,46 @@ export function HeadersPopup() {
       setHeaders(Object.entries(getHeaders()));
     }
   }, [headersPopupShown]);
-  if (!headersPopupShown) return null;
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        headersPopupShown &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setHeadersPopupShown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [headersPopupShown, setHeadersPopupShown]);
+
   return (
-    <div className="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center border border-panelBorder bg-overlayBackground bg-opacity-70 drop-shadow-lg">
+    <div
+      ref={dropdownRef}
+      className={`absolute top-full right-0 z-50 mt-6 w-[500px] transition-opacity duration-200 ${
+        headersPopupShown ? "opacity-100" : "pointer-events-none opacity-0"
+      }`}
+    >
       <form
         onSubmit={(e) => {
           e.preventDefault();
           onConfirmClick();
         }}
-        className="flex w-full max-w-2xl flex-col space-y-4 rounded-md bg-white"
+        className="flex w-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg"
       >
-        <div className="flex flex-row justify-between border-panelBorder border-b p-4">
-          <h1 className="font-bold text-lg">Headers</h1>
-          <button type="button" onClick={onExitPress}>
-            <XIcon className="h-6 w-6" />
+        <div className="flex flex-row items-center justify-between border-gray-200 border-b bg-gray-50 px-4 py-3">
+          <h2 className="font-semibold text-gray-900 text-sm">Headers</h2>
+          <button
+            type="button"
+            onClick={onExitPress}
+            className="rounded-md p-1 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-600"
+          >
+            <XIcon className="h-4 w-4" />
           </button>
         </div>
-        <div className="flex flex-col space-y-2 px-4 py-2">
+        <div className="flex flex-col space-y-2 bg-white px-4 py-3">
           {headers.map(([headerKey, headerValue], i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: their order doesn't change
             <div className="flex flex-col" key={i}>
@@ -112,10 +139,10 @@ export function HeadersPopup() {
                 />
                 <button
                   type="button"
-                  className="ml-2"
+                  className="ml-2 rounded-md p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
                   onClick={() => deleteHeader(i)}
                 >
-                  <XIcon className="mt-[0.45rem] mr-2 h-5 w-5" />
+                  <XIcon className="mt-[0.45rem] h-4 w-4" />
                 </button>
               </div>
               {errors[i] && (
@@ -125,18 +152,18 @@ export function HeadersPopup() {
           ))}
           <AddItemButton onClick={addHeader} />
         </div>
-        <div className="flex flex-row justify-between border-t border-t-panelBorder p-4">
-          <span className="flex flex-row items-center">
-            Save Headers
+        <div className="flex flex-row items-center justify-between border-gray-200 border-t bg-gray-50 px-4 py-3">
+          <label className="flex flex-row items-center gap-2 text-gray-600 text-xs">
             <input
               type="checkbox"
-              className="ml-2"
+              className="h-3.5 w-3.5 rounded border-gray-300"
               checked={saveHeadersToLocalStorage}
               onChange={(e) => setSaveHeadersToLocalStorage(e.target.checked)}
             />
-          </span>
-          <Button variant="query" formNoValidate onClick={onConfirmClick}>
-            Confirm <SaveIcon className="ml-1" />
+            <span>Save Headers</span>
+          </label>
+          <Button variant="query" type="submit">
+            Confirm <SaveIcon className="ml-1 h-3.5 w-3.5" />
           </Button>
         </div>
       </form>

@@ -9,9 +9,10 @@ describe("Parse ZodPromise", () => {
       type: "number",
       path: [],
     };
-    const schema = z.number().promise();
-    expect(parseZodPromiseDef(schema._def, defaultReferences())).toStrictEqual(
-      expected,
-    );
+    // In Zod 4, promise is created with z.promise(schema) instead of schema.promise()
+    const schema = z.promise(z.number());
+    expect(
+      parseZodPromiseDef(schema._zod.def, defaultReferences()),
+    ).toStrictEqual(expected);
   });
 });

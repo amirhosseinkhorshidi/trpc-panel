@@ -11,7 +11,7 @@ describe("Parse ZodEnum", () => {
       path: [],
     };
     const parsed = parseZodEnumDef(
-      z.enum(["one", "two", "three"])._def,
+      z.enum(["one", "two", "three"])._zod.def,
       defaultReferences(),
     );
     expect(expected).toStrictEqual(parsed);

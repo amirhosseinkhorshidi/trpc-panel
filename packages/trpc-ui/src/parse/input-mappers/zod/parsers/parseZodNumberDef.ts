@@ -1,8 +1,7 @@
 import { nodePropertiesFromRef } from "@src/parse/utils";
-import type { ZodNumberDef } from "zod";
 import type { NumberNode, ParseFunction } from "../../../parseNodeTypes";
 
-export const parseZodNumberDef: ParseFunction<ZodNumberDef, NumberNode> = (
+export const parseZodNumberDef: ParseFunction<any, NumberNode> = (
   def,
   refs,
 ) => {

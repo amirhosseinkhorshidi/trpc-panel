@@ -10,8 +10,8 @@ describe("Parse ZodNumber", () => {
       path: [],
     };
     const schema = z.number();
-    expect(parseZodNumberDef(schema._def, defaultReferences())).toStrictEqual(
-      expected,
-    );
+    expect(
+      parseZodNumberDef(schema._zod.def, defaultReferences()),
+    ).toStrictEqual(expected);
   });
 });

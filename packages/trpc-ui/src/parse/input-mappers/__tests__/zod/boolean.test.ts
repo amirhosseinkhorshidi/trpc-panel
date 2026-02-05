@@ -10,7 +10,10 @@ describe("Parse Zod Boolean", () => {
       path: [],
     };
     const schema = z.boolean();
-    const parsed = parseZodBooleanFieldDef(schema._def, defaultReferences());
+    const parsed = parseZodBooleanFieldDef(
+      schema._zod.def,
+      defaultReferences(),
+    );
     expect(parsed).toStrictEqual(expected);
   });
 });

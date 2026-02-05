@@ -10,7 +10,7 @@ describe("Parse ZodDefault", () => {
       path: [],
     };
     const zodSchema = z.number().default(5);
-    const parsed = parseZodDefaultDef(zodSchema._def, defaultReferences());
+    const parsed = parseZodDefaultDef(zodSchema._zod.def, defaultReferences());
     expect(parsed).toStrictEqual(expected);
   });
 });

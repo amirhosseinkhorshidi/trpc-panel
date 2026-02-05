@@ -52,7 +52,10 @@ describe("Parse ZodLiteral", () => {
     ];
     for (const testCase of testCases) {
       expect(
-        parseZodLiteralDef(z.literal(testCase.value)._def, defaultReferences()),
+        parseZodLiteralDef(
+          z.literal(testCase.value)._zod.def,
+          defaultReferences(),
+        ),
       ).toStrictEqual(testCase.expectedNode);
     }
   });
