@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
-import { renderTrpcPanel } from "trpc-ui";
+import { renderTrpcPanel } from "@ajayche/trpc-panel";
 import { testRouter } from "./router.js";
 dotenv.config();
 

@@ -1,4 +1,4 @@
-import { JsonViewer } from "@textea/json-viewer";
+import ReactJson from "@microlink/react-json-view";
 import prettyBytes from "pretty-bytes";
 import prettyMs from "pretty-ms";
 import React from "react";
@@ -23,7 +23,7 @@ export function Response({
 
   return (
     <FormSection title={title}>
-      <JsonViewer rootName={false} value={children} quotesOnKeys={false} />
+      <ReactJson src={typeof children === "string" ? { value: children } : children as object} theme="rjv-default" displayDataTypes={false} />
     </FormSection>
   );
 }

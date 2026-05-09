@@ -8,10 +8,8 @@ import { ProcedureFormContextProvider } from "@src/react-app/components/form/Pro
 import { ObjectField } from "@src/react-app/components/form/fields/ObjectField";
 import { defaultFormValuesForNode } from "@src/react-app/components/form/utils";
 import { CloseIcon } from "@src/react-app/components/icons/CloseIcon";
-import { ToggleJsonIcon } from "@src/react-app/components/icons/ToggleJsonIcon";
 import { trpc } from "@src/react-app/trpc";
 import type { RenderOptions } from "@src/render";
-import { sample } from "@stoplight/json-schema-sampler";
 
 import { fullFormats } from "ajv-formats/dist/formats";
 import React, { useRef, useState } from "react";
@@ -19,9 +17,7 @@ import { type Control, useForm, useFormState } from "react-hook-form";
 import getSize from "string-byte-length";
 import SuperJson from "superjson";
 import { useAsyncDuration } from "../../hooks/useAsyncDuration";
-import { AutoFillIcon } from "../../icons/AutoFillIcon";
 
-import Editor from "@monaco-editor/react";
 import { ErrorDisplay as ErrorComponent } from "./Error";
 import { FormSection } from "./FormSection";
 import { ProcedureFormButton } from "./ProcedureFormButton";
@@ -125,11 +121,6 @@ export function ProcedureForm({
 
   const fieldName = procedure.node.path.join(".");
 
-  const [useRawInput, setUseRawInput] = useState(false);
-  function toggleRawInput() {
-    setUseRawInput(!useRawInput);
-  }
-
   return (
     <ProcedureFormContextProvider path={procedure.pathFromRootRouter.join(".")}>
       <CollapsableSection
@@ -154,33 +145,7 @@ export function ProcedureForm({
               title="Input"
               topRightElement={
                 <div className="flex space-x-1">
-                  {useRawInput && usingSuperJson && (
-                    <a
-                      href="https://github.com/aidansunbury/trpc-ui#superjson-example-and-usage"
-                      className="hover:underline"
-                      target="blank"
-                    >
-                      Why do I see "json" and "meta" keys? ↗
-                    </a>
-                  )}
                   <XButton control={control} reset={resetForm} />
-                  <div className="h-6 w-6">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setValue(
-                          ROOT_VALS_PROPERTY_NAME,
-                          wrapSuperJson(
-                            sample(procedure.inputSchema),
-                            usingSuperJson,
-                          ),
-                        );
-                      }}
-                    >
-                      <AutoFillIcon className="h-6 w-6" />
-                    </button>
-                  </div>
-                  <ToggleRawInput onClick={toggleRawInput} />
                   <label className="flex flex-row items-center">
                     <input
                       checked={shouldValidate}
@@ -193,43 +158,22 @@ export function ProcedureForm({
                 </div>
               }
             >
-              {useRawInput && (
-                <Editor
-                  defaultLanguage="json"
-                  options={{
-                    minimap: {
-                      enabled: false,
-                    },
-                    formatOnType: true,
-                  }}
-                  height={"30vh"}
-                  value={JSON.stringify(
-                    watch(ROOT_VALS_PROPERTY_NAME),
-                    null,
-                    2,
-                  )}
-                  onChange={(value) =>
-                    setValue(ROOT_VALS_PROPERTY_NAME, JSON.parse(value ?? "{}"))
-                  }
-                />
-              )}
-              {!useRawInput &&
-                (procedure.node.type === "object" ? (
-                  Object.keys(procedure.node.children).length > 0 && (
-                    <ObjectField
-                      node={
-                        procedure.node as ParsedInputNode & {
-                          type: "object";
-                        }
+              {procedure.node.type === "object" ? (
+                Object.keys(procedure.node.children).length > 0 && (
+                  <ObjectField
+                    node={
+                      procedure.node as ParsedInputNode & {
+                        type: "object";
                       }
-                      label={fieldName}
-                      control={control}
-                      topLevel
-                    />
-                  )
-                ) : (
-                  <Field inputNode={procedure.node} control={control} />
-                ))}
+                    }
+                    label={fieldName}
+                    control={control}
+                    topLevel
+                  />
+                )
+              ) : (
+                <Field inputNode={procedure.node} control={control} />
+              )}
 
               <ProcedureFormButton
                 text={`Execute ${name}`}
@@ -283,16 +227,6 @@ function XButton({
           <CloseIcon className="h-6 w-6" />
         </button>
       )}
-    </div>
-  );
-}
-
-function ToggleRawInput({ onClick }: { onClick: () => void }) {
-  return (
-    <div className="h-6 w-6">
-      <button type="button" onClick={onClick}>
-        <ToggleJsonIcon className="h-6 w-6" />
-      </button>
     </div>
   );
 }

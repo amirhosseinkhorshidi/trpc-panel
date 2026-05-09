@@ -17,6 +17,14 @@
     "biome:check:fix": "biome check --write --unsafe --max-diagnostics=none"
   },
   "private": true,
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "@textea/json-viewer>react": ">=17",
+        "@textea/json-viewer>react-dom": ">=17"
+      }
+    }
+  },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@tsconfig/docusaurus": "^1.0.6",
